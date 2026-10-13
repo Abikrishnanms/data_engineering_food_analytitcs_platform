@@ -1,6 +1,6 @@
 # FoodFlow - Metric Definitions & Analytics Contract
 
-**Owner:** Swetha - Analytics Engineer
+**Owner:** Athulya - Analytics Engineer
 **Status:** v1.0 - ready for contract review with Meera (dashboard) and Athulya (NLQ)
 **Verified on:** full dataset, 600,000 orders, PostgreSQL 16, 29/29 checks in `tests/test_analytics.sql` pass
 
