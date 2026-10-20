@@ -5,14 +5,20 @@ from dotenv import load_dotenv
 
 from nlq.executor import run_query
 from nlq.prompt import build_system_prompt
+from nlq.rules import rule_based_sql
 from nlq.validator import validate_sql
 
 load_dotenv()
 
 MODEL = "claude-sonnet-4-6"
 
+HELP_TEXT = (
+    "CLARIFY: I did not understand. Try: top 5 restaurants in June 2025, "
+    "weekly orders, monthly revenue, cancellation rate, or repeat customers."
+)
+
 UNSUPPORTED_PATTERNS = [
-    (r"\bdriver|rider|courier\b", "FoodFlow has no driver data."),
+    (r"\b(driver|drivers|rider|courier)\b", "FoodFlow has no driver data."),
     (r"(how (long|many minutes)|delivery (time|duration)|minutes to deliver)",
      "FoodFlow does not record delivery duration. delivery_time is only a clock time."),
     (r"\b(delete|drop|truncate|update|insert|alter)\b",
@@ -32,6 +38,7 @@ def _response(status, answer, sql=None, columns=None, rows=None, warning=None):
 
 
 def _ask_llm(question: str) -> str:
+    """Use Claude when ANTHROPIC_API_KEY is set."""
     import anthropic
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -44,11 +51,16 @@ def _ask_llm(question: str) -> str:
     return msg.content[0].text.strip()
 
 
+def _ask_rules(question: str) -> str:
+    """Free fallback: translate the question with built-in rules."""
+    return rule_based_sql(question) or HELP_TEXT
+
+
 def _clean(text: str) -> str:
     return re.sub(r"^```(?:sql)?|```$", "", text.strip(), flags=re.MULTILINE).strip()
 
 
-def ask(question: str, llm=_ask_llm, runner=run_query):
+def ask(question: str, llm=None, runner=run_query):
     question = (question or "").strip()
     if not question:
         return _response("clarify", "Please type a question.")
@@ -57,13 +69,14 @@ def ask(question: str, llm=_ask_llm, runner=run_query):
         if re.search(pattern, question, re.IGNORECASE):
             return _response("unsupported", message)
 
-    if llm is _ask_llm and not os.getenv("ANTHROPIC_API_KEY"):
-        return _response("error", "The AI service is not configured yet (missing API key).")
+    # Choose the translator: a custom one (tests), Claude (if key), or rules.
+    if llm is None:
+        llm = _ask_llm if os.getenv("ANTHROPIC_API_KEY") else _ask_rules
 
     try:
         reply = _clean(llm(question))
     except Exception:
-        return _response("error", "Sorry, the AI service could not be reached.")
+        return _response("error", "Sorry, the question could not be translated.")
 
     if reply.upper().startswith("UNSUPPORTED:"):
         return _response("unsupported", reply.split(":", 1)[1].strip())
