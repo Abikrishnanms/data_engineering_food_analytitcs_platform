@@ -8,7 +8,19 @@ ALLOWED_VIEWS = {
     "v_kpi_monthly",
     "v_kpi_overall",
     "fn_kpi_summary",
-    # Add the v_q... view names from 20_business_questions.sql here later.
+    "fn_top_restaurants",
+    "fn_top_items",
+    "v_q01_weekly_orders_trend",
+    "v_q02_restaurant_monthly_ranking",
+    "v_q03_item_monthly_performance",
+    "v_q04_status_mix_monthly",
+    "v_q05_customer_orders",
+    "v_q05_repeat_customer_summary",
+    "v_q06_basket_size_monthly",
+    "v_q07_cuisine_mix_monthly",
+    "v_q08_payment_mix_monthly",
+    "v_q09_orders_by_recorded_hour",
+    "v_q10_city_revenue_monthly",
 }
 
 # Words that must never appear in a read-only query.
