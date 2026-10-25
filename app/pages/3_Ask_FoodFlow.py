@@ -1,6 +1,6 @@
 """
 FoodFlow Dashboard — Natural Language Query Page
-File: app/pages/3_💬_Ask_FoodFlow_AI.py
+File: app/pages/3_Ask_FoodFlow.py
 """
 
 import sys
@@ -14,7 +14,7 @@ import streamlit as st
 from app.components.nlq_container import render_nlq_interface
 from nlq.prompt import build_system_prompt
 
-st.set_page_config(page_title="Ask FoodFlow AI — Natural Language Query", page_icon="💬", layout="wide")
+st.set_page_config(page_title="Ask FoodFlow — Natural Language Query", page_icon="💬", layout="wide")
 
 render_nlq_interface()
 
