@@ -1,6 +1,7 @@
 import os
 import re
 
+from pathlib import Path
 from dotenv import load_dotenv
 
 from nlq.executor import run_query
@@ -8,7 +9,8 @@ from nlq.prompt import build_system_prompt
 from nlq.rules import rule_based_sql
 from nlq.validator import validate_sql
 
-load_dotenv()
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
 
 MODEL = "claude-sonnet-4-6"
 

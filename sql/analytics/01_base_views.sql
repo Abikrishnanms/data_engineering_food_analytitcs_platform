@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Analytics - Base Views
 -- File: sql/analytics/01_base_views.sql
--- Owner: Swetha - Analytics Engineer
 -- Run order: 01 -> 10 -> 20 -> 90 (re-running 01 drops dependent views; re-run all)
 --
 -- These two views are the ONLY place where raw tables are joined.

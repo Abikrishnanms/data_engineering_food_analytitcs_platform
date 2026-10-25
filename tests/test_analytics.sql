@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Analytics Tests
 -- File: tests/test_analytics.sql
--- Owner: Swetha - Analytics Engineer
 -- Run:  psql -h localhost -U postgres -d foodflow -f tests/test_analytics.sql
 -- Every row must show is_pass = true. "expected" is computed independently
 -- from the RAW tables; "actual" comes from the analytics views.

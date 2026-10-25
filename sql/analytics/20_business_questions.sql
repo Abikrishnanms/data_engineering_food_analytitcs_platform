@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Analytics - Business Question Views and Functions
 -- File: sql/analytics/20_business_questions.sql
--- Owner: Swetha - Analytics Engineer
 -- Depends on: 01_base_views.sql, 10_kpis.sql
 --
 -- Every object answers one named business question. "Qualifying" = Delivered.

@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Database Schema
 -- File: db/schema/001_create_tables.sql
--- Role: Lekshmi Priya - Database Engineer
 -- Description: DDL table definitions, data types, primary keys, foreign keys,
 --              and validation constraints for the FoodFlow platform.
 -- =============================================================================

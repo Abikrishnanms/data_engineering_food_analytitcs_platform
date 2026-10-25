@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Analytics - Read-only grants on the analytics contract
 -- File: sql/analytics/90_grants.sql
--- Owner: Swetha (agree with Lekshmi Priya, who owns the role)
 -- Run LAST, as a privileged user. Safe to re-run.
 --
 -- Goal: the NLQ/dashboard role can read ONLY the approved views/functions,

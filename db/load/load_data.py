@@ -1,7 +1,6 @@
 """
 FoodFlow Database Loader
 File: db/load/load_data.py
-Role: Lekshmi Priya - Database Engineer
 
 Description:
     Repeatable, high-performance loader for the FoodFlow dataset into PostgreSQL.
@@ -173,7 +172,7 @@ def load_table(cur, table_info):
 
 def main():
     print("=" * 70)
-    print("FOODFLOW DATABASE LOADER (Lekshmi Priya - Database Engineer)")
+    print("FOODFLOW DATABASE LOADER")
     print("=" * 70)
 
     # 1. Connect

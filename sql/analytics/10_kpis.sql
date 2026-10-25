@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Analytics - KPI Views and Functions
 -- File: sql/analytics/10_kpis.sql
--- Owner: Swetha - Analytics Engineer
 -- Depends on: 01_base_views.sql
 --
 -- Ratios (AOV, cancellation rate) are NOT additive. For any date range, never
