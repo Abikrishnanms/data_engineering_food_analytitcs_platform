@@ -14,5 +14,8 @@ __pycache__/
 # Generated profiling reports
 data/processed/
 
+# Large extracted raw CSVs (Swiggy_Data.zip is tracked)
+data/raw/*.csv
+
 # IDE files
 .vscode/

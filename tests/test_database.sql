@@ -1,7 +1,6 @@
 -- =============================================================================
 -- FoodFlow Database Validation & Test Queries
 -- File: tests/test_database.sql
--- Role: Lekshmi Priya - Database Engineer
 -- Description: Verification queries for table row counts, foreign key integrity,
 --              constraint compliance, and read-only testing.
 -- =============================================================================

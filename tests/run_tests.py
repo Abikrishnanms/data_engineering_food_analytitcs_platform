@@ -1,7 +1,6 @@
 """
 FoodFlow Database Test Runner
 File: tests/run_tests.py
-Role: Lekshmi Priya - Database Engineer
 
 Description:
     Runs tests/test_database.sql queries directly against the PostgreSQL database

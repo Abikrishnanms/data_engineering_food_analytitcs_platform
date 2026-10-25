@@ -1,9 +1,8 @@
 -- =============================================================================
 -- FoodFlow Database Indexes
 -- File: db/schema/002_indexes.sql
--- Role: Lekshmi Priya - Database Engineer
 -- Description: Indexes designed to optimize foreign key joins, dashboard date filters,
---              status filtering, and analytical aggregations for Swetha & Meera.
+--              status filtering, and analytical aggregations.
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
