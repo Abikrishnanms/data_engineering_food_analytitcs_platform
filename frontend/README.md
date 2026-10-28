@@ -1,16 +1,20 @@
-# React + Vite
+# FoodFlow Analytics — React Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This directory contains the **React 19** executive dashboard application for the FoodFlow Analytics Platform.
 
-Currently, two official plugins are available:
+## Features
+- **Blue & White Theme**: Professional, distraction-free SaaS design system built with custom CSS and Lucide React icons.
+- **Executive Dashboard**: 8 non-additive KPI cards, interactive SVG 365-day trend area charts, ranking bars, and distribution metrics.
+- **Ask FoodFlow (NLQ)**: Conversational business intelligence interface with AST-validated read-only SQL inspection and data tables.
+- **Vite Proxy**: Configured to seamlessly reverse-proxy `/api` requests to the FastAPI backend (`http://127.0.0.1:8000`).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Development
+```bash
+# Install dependencies
+npm install
 
-## React Compiler
+# Start development server
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+For full system architecture, ETL pipeline, Supabase Cloud configuration, and data scale documentation, refer to the [Root README](../README.md).
