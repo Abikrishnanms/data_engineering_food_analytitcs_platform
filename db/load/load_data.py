@@ -96,24 +96,27 @@ def get_connection():
             password=DB_PASSWORD,
         )
         conn.autocommit = False
+        with conn.cursor() as cur:
+            cur.execute("SET statement_timeout = 0;")
+        conn.commit()
         return conn
     except Exception as e:
-        print(f"\n[ERROR] Could not connect to PostgreSQL ({DB_HOST}:{DB_PORT}/{DB_NAME}) as '{DB_USER}'.")
-        print(f"Details: {e}")
-        print("\nPlease check your credentials and make sure PostgreSQL is running.")
+        print(f"\n[ERROR] Could not connect to PostgreSQL ({DB_HOST}:{DB_PORT}/{DB_NAME}) as '{DB_USER}'.", flush=True)
+        print(f"Details: {e}", flush=True)
+        print("\nPlease check your credentials and make sure PostgreSQL is running.", flush=True)
         sys.exit(1)
 
 
 def execute_sql_file(conn, file_path):
     """Execute all statements in a SQL script file."""
-    print(f"\n--> Executing SQL script: {file_path.name}")
+    print(f"\n--> Executing SQL script: {file_path.name}", flush=True)
     with open(file_path, "r", encoding="utf-8") as f:
         sql_content = f.read()
 
     with conn.cursor() as cur:
         cur.execute(sql_content)
     conn.commit()
-    print(f"[OK] Successfully executed {file_path.name}")
+    print(f"[OK] Successfully executed {file_path.name}", flush=True)
 
 
 def get_csv_stream(csv_name):
@@ -123,12 +126,12 @@ def get_csv_stream(csv_name):
     """
     extracted_path = RAW_DIR / csv_name
     if extracted_path.exists():
-        print(f"    Reading from extracted file: {extracted_path}")
+        print(f"    Reading from extracted file: {extracted_path}", flush=True)
         f = open(extracted_path, "r", encoding="utf-8")
         return f, f.close
 
     if ZIP_PATH.exists():
-        print(f"    Streaming directly from ZIP: {ZIP_PATH.name} -> {csv_name}")
+        print(f"    Streaming directly from ZIP: {ZIP_PATH.name} -> {csv_name}", flush=True)
         zf = zipfile.ZipFile(ZIP_PATH, "r")
         csv_file = zf.open(csv_name, "r")
         text_stream = io.TextIOWrapper(csv_file, encoding="utf-8")
@@ -165,47 +168,47 @@ def load_table(cur, table_info):
         # Check row count
         cur.execute(f"SELECT COUNT(*) FROM {table};")
         row_count = cur.fetchone()[0]
-        print(f"[LOADED] Table '{table}': {row_count:,} rows in {elapsed:.2f}s")
+        print(f"[LOADED] Table '{table}': {row_count:,} rows in {elapsed:.2f}s", flush=True)
     finally:
         close_cb()
 
 
 def main():
-    print("=" * 70)
-    print("FOODFLOW DATABASE LOADER")
-    print("=" * 70)
+    print("=" * 70, flush=True)
+    print("FOODFLOW DATABASE LOADER", flush=True)
+    print("=" * 70, flush=True)
 
     # 1. Connect
     conn = get_connection()
-    print(f"[CONNECTED] PostgreSQL connected to {DB_NAME} at {DB_HOST}:{DB_PORT}")
+    print(f"[CONNECTED] PostgreSQL connected to {DB_NAME} at {DB_HOST}:{DB_PORT}", flush=True)
 
     try:
         # 2. Re-create tables
         tables_file = SCHEMA_DIR / "001_create_tables.sql"
         execute_sql_file(conn, tables_file)
 
-        # 3. Load data in relational order
-        print("\n--> Starting bulk data load...")
+        # 3. Load data in relational order with immediate commit
+        print("\n--> Starting bulk data load...", flush=True)
         total_load_start = time.time()
-        with conn.cursor() as cur:
-            for item in TABLE_CSV_MAP:
+        for item in TABLE_CSV_MAP:
+            with conn.cursor() as cur:
                 load_table(cur, item)
-        conn.commit()
-        total_elapsed = time.time() - total_load_start
-        print(f"\n[OK] All tables successfully loaded in {total_elapsed:.2f}s!")
+            conn.commit()
 
-        # 4. Build indexes
+        total_elapsed = time.time() - total_load_start
+        print(f"\n[OK] All tables successfully loaded in {total_elapsed:.2f}s!", flush=True)
+
+        # 4. Build foreign keys & indexes
         indexes_file = SCHEMA_DIR / "002_indexes.sql"
         execute_sql_file(conn, indexes_file)
 
-        print("\n" + "=" * 70)
-        print("DATABASE INITIALIZATION & LOAD COMPLETED SUCCESSFULLY!")
-        print("Run 'tests/test_database.sql' to run full validation checks.")
-        print("=" * 70)
+        print("\n" + "=" * 70, flush=True)
+        print("DATABASE INITIALIZATION & LOAD COMPLETED SUCCESSFULLY!", flush=True)
+        print("=" * 70, flush=True)
 
     except Exception as e:
         conn.rollback()
-        print(f"\n[ERROR] Data load failed: {e}")
+        print(f"\n[ERROR] Data load failed: {e}", flush=True)
         raise e
     finally:
         conn.close()

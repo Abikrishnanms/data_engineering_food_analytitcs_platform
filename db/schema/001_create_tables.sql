@@ -1,8 +1,9 @@
 -- =============================================================================
 -- FoodFlow Database Schema
 -- File: db/schema/001_create_tables.sql
--- Description: DDL table definitions, data types, primary keys, foreign keys,
+-- Description: DDL table definitions, data types, primary keys,
 --              and validation constraints for the FoodFlow platform.
+--              Foreign keys are added in 002_indexes.sql for high-speed bulk loading.
 -- =============================================================================
 
 -- Drop tables in reverse order of dependencies if they already exist
@@ -60,12 +61,7 @@ CREATE TABLE menu (
     category       VARCHAR(100),
     price          NUMERIC(10, 2) NOT NULL CHECK (price >= 0.00),
     is_veg         SMALLINT NOT NULL CHECK (is_veg IN (0, 1)),
-    created_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_menu_restaurant
-        FOREIGN KEY (restaurant_id)
-        REFERENCES restaurants (restaurant_id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
+    created_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE menu IS 'Catalog of food items offered by partner restaurants';
@@ -87,17 +83,7 @@ CREATE TABLE orders (
     order_status    VARCHAR(50) NOT NULL CHECK (order_status IN ('Delivered', 'Cancelled')),
     payment_method  VARCHAR(50) NOT NULL CHECK (payment_method IN ('UPI', 'Credit Card', 'Debit Card', 'Cash on Delivery', 'Wallet')),
     total_amount    NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0.00),
-    created_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_orders_user
-        FOREIGN KEY (user_id)
-        REFERENCES users (user_id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE,
-    CONSTRAINT fk_orders_restaurant
-        FOREIGN KEY (restaurant_id)
-        REFERENCES restaurants (restaurant_id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
+    created_at      TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE orders IS 'Order transactions placed by customers';
@@ -115,17 +101,7 @@ CREATE TABLE order_items (
     menu_id        VARCHAR(50) NOT NULL,
     quantity       INTEGER NOT NULL CHECK (quantity > 0),
     price          NUMERIC(10, 2) NOT NULL CHECK (price >= 0.00),
-    created_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_order_items_order
-        FOREIGN KEY (order_id)
-        REFERENCES orders (order_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT fk_order_items_menu
-        FOREIGN KEY (menu_id)
-        REFERENCES menu (menu_id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
+    created_at     TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE order_items IS 'Itemized line items belonging to orders';
